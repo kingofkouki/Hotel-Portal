@@ -1,0 +1,30 @@
+<div class="panel active">
+    <h3>Daily Lost & Found Registry</h3>
+    <p>Formulir pencatatan barang tertinggal milik tamu lengkap dengan nomor kamar dan petugas pengaman.</p>
+    
+    <form id="lostFoundForm" onsubmit="submitLostFound(event)">
+        <div style="display: flex; gap: 16px;">
+            <div class="form-group" style="flex: 2;">
+                <label>NAMA / DESKRIPSI BARANG</label>
+                <input type="text" id="lfItemName" required class="form-control" placeholder="Contoh: Dompet Kulit Hitam / HP Samsung">
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>NOMOR KAMAR / AREA</label>
+                <input type="text" id="lfRoom" required class="form-control" placeholder="Contoh: Room 405">
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 16px;">
+            <div class="form-group" style="flex: 1;">
+                <label>TANGGAL DITEMUKAN</label>
+                <input type="date" id="lfDate" required class="form-control">
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>PETUGAS YANG MENGAMANKAN</label>
+                <input type="text" id="lfFinder" required class="form-control" placeholder="Contoh: Rina (Housekeeping)">
+            </div>
+        </div>
+
+        <button type="submit" id="submitLfBtn" class="btn-primary">Simpan Data Lost & Found</button>
+    </form>
+</div>

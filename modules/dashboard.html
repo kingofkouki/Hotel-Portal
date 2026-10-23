@@ -1,0 +1,40 @@
+<section class="panel active dashboard-panel">
+    <div class="dashboard-heading">
+        <div>
+            <h3>Room Status Dashboard</h3>
+            <p>Ringkasan kondisi kamar dan status terkini setiap kamar.</p>
+        </div>
+        <button id="dashboardRefresh" class="dashboard-page-button" type="button">Refresh</button>
+    </div>
+
+    <div class="room-summary-grid" aria-label="Jumlah kamar berdasarkan status">
+        <div class="room-summary-card room-summary-dirty">
+            <span class="room-summary-count" id="roomCountDirty">0</span>
+            <span class="room-summary-label">Dirty</span>
+        </div>
+        <div class="room-summary-card room-summary-clean">
+            <span class="room-summary-count" id="roomCountClean">0</span>
+            <span class="room-summary-label">Clean</span>
+        </div>
+        <div class="room-summary-card room-summary-inspected">
+            <span class="room-summary-count" id="roomCountInspected">0</span>
+            <span class="room-summary-label">Inspected</span>
+        </div>
+        <div class="room-summary-card room-summary-ooo">
+            <span class="room-summary-count" id="roomCountOoo">0</span>
+            <span class="room-summary-label">Out of Order</span>
+        </div>
+    </div>
+
+    <div class="dashboard-room-toolbar">
+        <p id="dashboardStatus" class="dashboard-status" role="status" aria-live="polite">Memuat status kamar...</p>
+        <label class="dashboard-room-search">
+            <span>Cari nomor kamar</span>
+            <input id="dashboardSearch" class="form-control" type="search" placeholder="Contoh: 101">
+        </label>
+    </div>
+
+    <div id="dashboardRoomGrid" class="dashboard-room-grid" aria-live="polite">
+        <p class="dashboard-room-empty">Memuat status kamar...</p>
+    </div>
+</section>

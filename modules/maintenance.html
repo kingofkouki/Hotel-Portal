@@ -1,0 +1,33 @@
+<div class="panel active">
+    <h3>Maintenance Request</h3>
+    <p>Formulir pelaporan kendala fasilitas atau kerusakan alat hotel untuk segera ditindaklanjuti tim teknik.</p>
+    
+    <form id="maintenanceForm" onsubmit="submitMaintenance(event)">
+        <div class="form-group">
+            <label>NOMOR KAMAR / AREA</label>
+            <input type="text" id="maintRoom" required class="form-control" placeholder="Contoh: Room 302 / Lobby Utama">
+        </div>
+
+        <div class="form-group">
+            <label>DESKRIPSI KERUSAKAN</label>
+            <textarea id="maintDesc" required rows="3" class="form-control" placeholder="Jelaskan kendala secara singkat..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 16px;">
+            <div class="form-group" style="flex: 1;">
+                <label>PRIORITAS</label>
+                <select id="maintPriority" class="form-control">
+                    <option value="Normal">Normal</option>
+                    <option value="Urgent">Urgent (Darurat)</option>
+                    <option value="Low">Low (Rendah)</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>NAMA PELAPOR / DEPARTEMEN</label>
+                <input type="text" id="maintReporter" required class="form-control" placeholder="Contoh: Siska (Front Office)">
+            </div>
+        </div>
+
+        <button type="submit" id="submitMaintBtn" class="btn-primary">Kirim Laporan</button>
+    </form>
+</div>

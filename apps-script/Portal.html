@@ -1,0 +1,2322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zaky iOS Hotel Portal</title>
+    <style>
+:root {
+    --bg-color: #f5f5f7;
+    --sidebar-bg: rgba(255, 255, 255, 0.8);
+    --card-bg: #ffffff;
+    --control-bg: #fafafa;
+    --table-header-bg: #fafafa;
+    --toast-bg: rgba(255, 255, 255, 0.85);
+    --text-primary: #1d1d1f;
+    --text-secondary: #86868b;
+    --accent-color: #0071e3;
+    --accent-hover: #0077ed;
+    --border-color: rgba(0, 0, 0, 0.08);
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    --radius: 14px;
+}
+
+[data-theme="dark"] {
+    color-scheme: dark;
+    --bg-color: #17181c;
+    --sidebar-bg: rgba(35, 36, 42, 0.9);
+    --card-bg: #23242a;
+    --control-bg: #2d2e35;
+    --table-header-bg: #2d2e35;
+    --toast-bg: rgba(43, 44, 51, 0.92);
+    --text-primary: #f5f5f7;
+    --text-secondary: #a1a1aa;
+    --border-color: rgba(255, 255, 255, 0.12);
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    overflow: hidden;
+}
+
+.portal-shell {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    min-height: 0;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.auth-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: var(--bg-color);
+}
+
+.auth-card {
+    width: min(100%, 420px);
+    padding: 32px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+}
+
+.auth-icon {
+    margin-bottom: 12px;
+    font-size: 2rem;
+}
+
+.auth-card h1 {
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+
+.auth-card > p {
+    margin-bottom: 20px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.auth-card .form-group {
+    margin-bottom: 16px;
+}
+
+.auth-message {
+    min-height: 1.4em;
+    margin: 0 !important;
+    color: #c62828 !important;
+    font-size: 0.9rem !important;
+}
+
+.auth-card .btn-primary {
+    width: 100%;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sidebar {
+    width: 280px;
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--border-color);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+}
+
+.sidebar-brand {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-brand span {
+    background: var(--accent-color);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+}
+
+.menu-category {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 12px 4px 12px;
+}
+
+.menu-navigation {
+    display: contents;
+}
+
+.menu-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    text-align: left;
+    padding: 12px 14px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-icon {
+    flex: 0 0 auto;
+}
+
+body[data-nav-style="icons"] .menu-label,
+body[data-nav-style="text"] .menu-icon {
+    display: none;
+}
+
+body[data-nav-style="icons"] .menu-btn {
+    justify-content: center;
+}
+
+.menu-btn:hover {
+    background: rgba(0, 113, 227, 0.08);
+    color: var(--accent-color);
+}
+
+.menu-btn.active {
+    background: var(--accent-color);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
+}
+
+.main-content {
+    flex: 1;
+    padding: 32px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-top h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.user-profile {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    background: var(--card-bg);
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.theme-toggle {
+    padding: 8px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    box-shadow: var(--shadow);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent-color);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+.panel {
+    display: none;
+    background: var(--card-bg);
+    padding: 28px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.panel.active {
+    display: block;
+}
+
+.panel h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.panel p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    background: var(--control-bg);
+    color: var(--text-primary);
+    outline: none;
+}
+
+.btn-primary {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- iOS Notification Toast / Modal Pop-up di Tengah --- */
+#toastNotification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: var(--toast-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border-color);
+    padding: 24px 32px;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#toastNotification.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+#toastNotification h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+#toastNotification p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* --- iOS Table / List Style --- */
+.ios-table-container {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+.ios-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.ios-table th {
+    background: var(--table-header-bg);
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.ios-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.ios-table tr:last-child td {
+    border-bottom: none;
+}
+
+.ios-table tr:hover {
+    background: rgba(0, 113, 227, 0.02);
+}
+
+.dashboard-toolbar {
+    display: flex;
+    align-items: end;
+    gap: 12px;
+    margin: 20px 0 12px;
+}
+
+.dashboard-heading,
+.dashboard-room-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.dashboard-heading .dashboard-page-button {
+    flex: 0 0 auto;
+}
+
+.room-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin: 22px 0;
+}
+
+.room-summary-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 14px 16px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+}
+
+.room-summary-count {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.room-summary-label {
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.room-summary-dirty,
+.room-card-dirty {
+    background: #fff0d6;
+    border-color: #f0c36d;
+    color: #704500;
+}
+
+.room-summary-clean,
+.room-card-clean {
+    background: #dcf7e4;
+    border-color: #84d59b;
+    color: #176b30;
+}
+
+.room-summary-inspected,
+.room-card-inspected {
+    background: #dff1ff;
+    border-color: #8bc8f3;
+    color: #14547b;
+}
+
+.room-summary-ooo,
+.room-card-ooo {
+    background: #ffe1e0;
+    border-color: #f0a09b;
+    color: #92231d;
+}
+
+.dashboard-room-toolbar {
+    margin: 8px 0 14px;
+}
+
+.dashboard-room-toolbar .dashboard-status {
+    margin: 0 !important;
+}
+
+.dashboard-room-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.dashboard-room-search .form-control {
+    width: 180px;
+    min-height: 40px;
+    padding: 8px 10px;
+}
+
+.dashboard-room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    gap: 12px;
+}
+
+.dashboard-room-card {
+    display: flex;
+    aspect-ratio: 1;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.dashboard-room-number {
+    overflow: hidden;
+    max-width: 100%;
+    font-size: 1.25rem;
+    font-weight: 750;
+    line-height: 1.1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dashboard-room-status {
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.room-card-unknown {
+    background: var(--control-bg);
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+.dashboard-room-empty {
+    grid-column: 1 / -1;
+    padding: 24px 16px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+[data-theme="dark"] .room-summary-dirty,
+[data-theme="dark"] .room-card-dirty {
+    background: #4b3820;
+    border-color: #87672f;
+    color: #ffda91;
+}
+
+[data-theme="dark"] .room-summary-clean,
+[data-theme="dark"] .room-card-clean {
+    background: #1d4029;
+    border-color: #38774b;
+    color: #9ce8ad;
+}
+
+[data-theme="dark"] .room-summary-inspected,
+[data-theme="dark"] .room-card-inspected {
+    background: #1d394d;
+    border-color: #3b6f91;
+    color: #a3d9ff;
+}
+
+[data-theme="dark"] .room-summary-ooo,
+[data-theme="dark"] .room-card-ooo {
+    background: #4a2726;
+    border-color: #884644;
+    color: #ffaaa5;
+}
+
+.dashboard-filter,
+.dashboard-search {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dashboard-filter {
+    flex: 0 0 210px;
+}
+
+.dashboard-search {
+    flex: 1;
+}
+
+.dashboard-filter > span,
+.dashboard-search > span {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.dashboard-refresh {
+    min-height: 44px;
+    margin: 0;
+}
+
+.dashboard-status {
+    min-height: 1.4em;
+    margin: 0 0 10px !important;
+    font-size: 0.85rem !important;
+}
+
+.dashboard-table-container {
+    margin-top: 0;
+    overflow-x: auto;
+}
+
+.dashboard-table {
+    min-width: 700px;
+}
+
+.dashboard-table td {
+    vertical-align: top;
+}
+
+.dashboard-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.room-status-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 28px;
+}
+
+.room-status-heading h3 {
+    margin-bottom: 6px;
+}
+
+.room-status-heading p {
+    margin-bottom: 0;
+}
+
+.room-status-heading .dashboard-page-button {
+    flex: 0 0 auto;
+}
+
+.room-status-tools {
+    display: flex;
+    align-items: end;
+    gap: 10px;
+}
+
+.room-status-search {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 180px;
+}
+
+.room-status-search span {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.room-status-search .form-control {
+    min-height: 40px;
+    padding: 8px 10px;
+}
+
+.room-status-table-container {
+    margin-top: 0;
+    overflow-x: auto;
+}
+
+.room-status-table {
+    min-width: 920px;
+}
+
+.room-status-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+}
+
+.room-status-sort:hover,
+.room-status-sort:focus-visible {
+    color: var(--accent-color);
+}
+
+.room-status-sort:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+    border-radius: 3px;
+}
+
+.room-status-select {
+    min-width: 180px;
+    padding: 8px 10px;
+}
+
+.room-status-notes,
+.room-status-staff {
+    min-width: 150px;
+    padding: 8px 10px;
+}
+
+.room-status-save {
+    min-width: 80px;
+}
+
+.dashboard-page-size {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.dashboard-page-size .form-control {
+    width: auto;
+    min-width: 76px;
+    padding: 8px 10px;
+}
+
+.dashboard-page-info {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.dashboard-page-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.dashboard-page-button {
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 9px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.dashboard-page-button:hover:not(:disabled) {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.dashboard-page-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.dashboard-timestamp {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+    white-space: nowrap;
+}
+
+.dashboard-timestamp span + span {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+}
+
+.dashboard-detail + .dashboard-detail {
+    margin-top: 4px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    max-width: 190px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.status-badge-success {
+    background: rgba(52, 199, 89, 0.14);
+    color: #19833b;
+}
+
+.status-badge-warning {
+    background: rgba(255, 159, 10, 0.16);
+    color: #9a5b00;
+}
+
+.status-badge-danger {
+    background: rgba(255, 59, 48, 0.14);
+    color: #c62820;
+}
+
+.status-badge-muted,
+.status-badge-recorded {
+    background: var(--control-bg);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .status-badge-success {
+    color: #75e095;
+}
+
+[data-theme="dark"] .status-badge-warning {
+    color: #ffc56b;
+}
+
+[data-theme="dark"] .status-badge-danger {
+    color: #ff827a;
+}
+
+body[data-nav-size="small"] .menu-btn {
+    min-height: 36px;
+    padding: 8px 10px;
+    font-size: 0.8rem;
+}
+
+body[data-nav-size="small"] .menu-icon {
+    font-size: 0.95rem;
+}
+
+body[data-nav-size="large"] .menu-btn {
+    min-height: 52px;
+    padding: 14px 16px;
+    font-size: 1.05rem;
+}
+
+body[data-nav-size="large"] .menu-icon {
+    font-size: 1.35rem;
+}
+
+.settings-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    max-width: 720px;
+    margin-top: 24px;
+}
+
+.settings-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.settings-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.settings-section-title {
+    margin-top: 24px;
+    margin-bottom: 8px;
+}
+
+.settings-room-section {
+    max-width: 720px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.settings-room-section > p {
+    margin-bottom: 14px;
+}
+
+.settings-room-form {
+    display: flex;
+    align-items: end;
+    gap: 12px;
+}
+
+.settings-room-form .settings-field {
+    flex: 1;
+}
+
+.settings-room-form .btn-primary {
+    min-height: 44px;
+    margin: 0;
+}
+
+.settings-room-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+}
+
+.settings-room-list li {
+    padding: 7px 11px;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--control-bg);
+    font-size: 0.85rem;
+}
+
+.settings-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 16px;
+    background: var(--control-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.settings-preview-icon {
+    font-size: 1.2rem;
+}
+
+.settings-preview[data-nav-style="icons"] .settings-preview-label,
+.settings-preview[data-nav-style="text"] .settings-preview-icon {
+    display: none;
+}
+
+.settings-preview[data-nav-size="small"] {
+    font-size: 0.8rem;
+    padding: 10px;
+}
+
+.settings-preview[data-nav-size="large"] {
+    font-size: 1.1rem;
+    padding: 20px;
+}
+
+.settings-preview[data-nav-size="small"] .settings-preview-icon {
+    font-size: 0.95rem;
+}
+
+.settings-preview[data-nav-size="large"] .settings-preview-icon {
+    font-size: 1.5rem;
+}
+
+@media (max-width: 700px) {
+    body {
+        min-height: 100vh;
+        min-height: 100dvh;
+        height: auto;
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .portal-shell {
+        min-height: 100vh;
+        min-height: 100dvh;
+        height: auto;
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        padding: 10px 12px;
+        overflow: visible;
+        overflow-y: hidden;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-brand {
+        flex-shrink: 0;
+        margin: 0;
+        padding: 8px 4px;
+        font-size: 0.95rem;
+        gap: 6px;
+    }
+
+    .sidebar-brand span {
+        padding: 3px 6px;
+        font-size: 0.7rem;
+    }
+
+    .menu-navigation {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        gap: 8px;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .menu-navigation::-webkit-scrollbar {
+        display: none;
+    }
+
+    .menu-category {
+        display: block;
+        padding: 10px 10px 2px;
+        font-size: 0.68rem;
+        letter-spacing: 0.7px;
+    }
+
+    .menu-btn {
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+        justify-content: center;
+        min-height: 44px;
+        padding: 8px 4px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        background: var(--card-bg);
+        box-shadow: none;
+        font-size: 1.15rem;
+    }
+
+    .menu-category {
+        display: none;
+    }
+
+    body[data-nav-style="adaptive"] .menu-label,
+    body[data-nav-style="icons"] .menu-label,
+    body[data-nav-style="text"] .menu-icon {
+        display: none;
+    }
+
+    body[data-nav-style="adaptive"] .menu-btn,
+    body[data-nav-style="icons"] .menu-btn {
+        flex: 1 1 0;
+    }
+
+    body[data-nav-style="text"] .menu-btn,
+    body[data-nav-style="both"] .menu-btn {
+        flex: 0 0 auto;
+        min-width: 44px;
+        padding-right: 12px;
+        padding-left: 12px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+
+    body[data-nav-style="text"] .menu-btn {
+        flex: 1 1 0;
+    }
+
+    body[data-nav-style="both"] .menu-btn {
+        gap: 6px;
+    }
+
+    .menu-btn.active {
+        border-color: var(--accent-color);
+        background: var(--control-bg);
+        color: var(--accent-color);
+        box-shadow: 0 0 0 1px var(--accent-color);
+    }
+
+    .main-content {
+        width: 100%;
+        min-width: 0;
+        padding: 20px 16px 32px;
+        overflow: visible;
+        gap: 16px;
+    }
+
+    .header-top {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 0;
+    }
+
+    .header-top h1 {
+        font-size: 1.4rem;
+    }
+
+    .header-actions {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .dashboard-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .dashboard-heading {
+        align-items: flex-start;
+    }
+
+    .room-summary-grid {
+        gap: 8px;
+        margin: 16px 0;
+    }
+
+    .room-summary-card {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+        padding: 10px;
+    }
+
+    .room-summary-count {
+        font-size: 1.25rem;
+    }
+
+    .room-summary-label {
+        font-size: 0.72rem;
+        line-height: 1.2;
+    }
+
+    .dashboard-room-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .dashboard-room-search {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .dashboard-room-search .form-control {
+        width: 100%;
+    }
+
+    .dashboard-room-grid {
+        grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+        gap: 8px;
+    }
+
+    .dashboard-room-number {
+        font-size: 1.05rem;
+    }
+
+    .dashboard-room-status {
+        font-size: 0.65rem;
+    }
+
+    .dashboard-filter {
+        flex-basis: auto;
+    }
+
+    .dashboard-refresh {
+        width: 100%;
+    }
+
+    .dashboard-pagination {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .dashboard-page-size {
+        grid-column: 1 / -1;
+        justify-content: space-between;
+    }
+
+    .dashboard-page-info {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    .dashboard-page-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        width: 100%;
+    }
+
+    .dashboard-page-button {
+        flex: 1;
+        min-height: 44px;
+    }
+
+    .room-status-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .room-status-tools {
+        align-items: end;
+        width: 100%;
+    }
+
+    .room-status-search {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .room-status-tools .dashboard-page-button {
+        min-height: 44px;
+    }
+
+    .user-profile,
+    .theme-toggle {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+
+    .panel {
+        padding: 20px 16px;
+        border-radius: 12px;
+    }
+
+    .panel form > div[style*="display: flex"] {
+        flex-direction: column;
+        gap: 0 !important;
+    }
+
+    .form-control {
+        min-height: 44px;
+        font-size: 16px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        min-height: 46px;
+    }
+
+    .ios-table-container {
+        overflow-x: auto;
+    }
+
+    .ios-table {
+        min-width: 560px;
+    }
+
+    .dashboard-table {
+        min-width: 700px;
+    }
+
+    .room-status-table {
+        min-width: 920px;
+    }
+
+    .settings-room-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .settings-room-form .btn-primary {
+        width: 100%;
+    }
+}
+
+@media (max-width: 380px) {
+    .sidebar {
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+
+    @media (max-width: 700px) {
+        body[data-nav-size="small"] .menu-btn {
+            min-height: 36px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            font-size: 0.78rem;
+        }
+
+        body[data-nav-size="small"] .menu-icon {
+            font-size: 0.95rem;
+        }
+
+        body[data-nav-size="large"] .menu-btn {
+            min-height: 52px;
+            font-size: 1.3rem;
+        }
+
+        body[data-nav-size="large"][data-nav-style="text"] .menu-btn,
+        body[data-nav-size="large"][data-nav-style="both"] .menu-btn {
+            font-size: 0.95rem;
+        }
+
+        body[data-nav-size="large"] .menu-icon {
+            font-size: 1.5rem;
+        }
+
+        .settings-options {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .sidebar-brand {
+        margin-right: 2px;
+        font-size: 0.85rem;
+    }
+
+    .menu-navigation {
+        gap: 6px;
+    }
+
+    .menu-btn {
+        min-height: 42px;
+        padding: 6px 2px;
+        font-size: 1.05rem;
+    }
+
+    .main-content {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+}
+</style>
+</head>
+<body>
+    <section id="authScreen" class="auth-screen" aria-labelledby="authTitle">
+        <form id="loginForm" class="auth-card">
+            <div class="auth-icon" aria-hidden="true">🏨</div>
+            <h1 id="authTitle">QIN Hotel Portal</h1>
+            <p>Masuk menggunakan akun yang diberikan administrator.</p>
+            <label class="form-group">
+                <span>Username</span>
+                <input id="loginUsername" class="form-control" type="text" autocomplete="username" maxlength="50" required>
+            </label>
+            <label class="form-group">
+                <span>Password</span>
+                <input id="loginPassword" class="form-control" type="password" autocomplete="current-password" required>
+            </label>
+            <p id="loginMessage" class="auth-message" role="alert" aria-live="polite"></p>
+            <button id="loginButton" class="btn-primary" type="submit">Masuk</button>
+        </form>
+    </section>
+
+    <div id="portalShell" class="portal-shell" hidden>
+    <!-- Sidebar Navigasi -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            🏨 QIN PORTAL
+        </div>
+
+        <nav class="menu-navigation" aria-label="Main navigation">
+            <button class="menu-btn" data-module="dashboard" aria-label="Data Dashboard" title="Data Dashboard" onclick="loadModule('dashboard', event, 'Data Dashboard')"><span class="menu-icon" aria-hidden="true">📊</span><span class="menu-label">Data Dashboard</span></button>
+            <div class="menu-category">Operasional Harian</div>
+            <button class="menu-btn active" data-module="shift-log" aria-label="Shift Handover Log" title="Shift Handover Log" onclick="loadModule('shift-log', event, 'Shift Handover Log')"><span class="menu-icon" aria-hidden="true">📋</span><span class="menu-label">Shift Handover Log</span></button>
+            <button class="menu-btn" data-module="room-status" aria-label="Room Status Check" title="Room Status Check" onclick="loadModule('room-status', event, 'Room Status Check')"><span class="menu-icon" aria-hidden="true">🛏️</span><span class="menu-label">Room Status Check</span></button>
+            <button class="menu-btn" data-module="lost-found" aria-label="Lost & Found" title="Lost & Found" onclick="loadModule('lost-found', event, 'Lost & Found')"><span class="menu-icon" aria-hidden="true">🔍</span><span class="menu-label">Lost & Found</span></button>
+            
+            <div class="menu-category">Fasilitas & Pemeliharaan</div>
+            <button class="menu-btn" data-module="maintenance" aria-label="Maintenance Request" title="Maintenance Request" onclick="loadModule('maintenance', event, 'Maintenance Request')"><span class="menu-icon" aria-hidden="true">🛠️</span><span class="menu-label">Maintenance Request</span></button>
+            <button class="menu-btn" data-module="settings" aria-label="Settings" title="Settings" onclick="loadModule('settings', event, 'Settings')"><span class="menu-icon" aria-hidden="true">⚙️</span><span class="menu-label">Settings</span></button>
+        </nav>
+        
+        <!-- Tambahkan menu modul lainnya di sini nanti -->
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="header-top">
+            <h1 id="pageTitle">Shift Handover Log</h1>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">🌙 Dark mode</button>
+                <div class="user-profile">👋 <span id="signedInUser"></span></div>
+                <button class="theme-toggle" id="logoutButton" type="button">Log out</button>
+            </div>
+        </div>
+
+        <!-- Kotak Dinamis tempat file HTML modul luar akan dimuat secara otomatis -->
+        <div id="moduleContainer">
+            <!-- Konten modul akan dirender di sini oleh JavaScript -->
+        </div>
+    </div>
+
+    <!-- iOS Toast Notification Pop-up di Tengah -->
+    <div id="toastNotification">
+        <h4 id="toastTitle">Berhasil</h4>
+        <p id="toastMessage">Data berhasil dikirim ke Google Sheets.</p>
+    </div>
+
+    <!-- Apps Script HTML Service uses these embedded templates instead of public module fetches. -->
+    <template id="module-dashboard">
+<section class="panel active dashboard-panel">
+    <div class="dashboard-heading">
+        <div>
+            <h3>Room Status Dashboard</h3>
+            <p>Ringkasan kondisi kamar dan status terkini setiap kamar.</p>
+        </div>
+        <button id="dashboardRefresh" class="dashboard-page-button" type="button">Refresh</button>
+    </div>
+
+    <div class="room-summary-grid" aria-label="Jumlah kamar berdasarkan status">
+        <div class="room-summary-card room-summary-dirty">
+            <span class="room-summary-count" id="roomCountDirty">0</span>
+            <span class="room-summary-label">Dirty</span>
+        </div>
+        <div class="room-summary-card room-summary-clean">
+            <span class="room-summary-count" id="roomCountClean">0</span>
+            <span class="room-summary-label">Clean</span>
+        </div>
+        <div class="room-summary-card room-summary-inspected">
+            <span class="room-summary-count" id="roomCountInspected">0</span>
+            <span class="room-summary-label">Inspected</span>
+        </div>
+        <div class="room-summary-card room-summary-ooo">
+            <span class="room-summary-count" id="roomCountOoo">0</span>
+            <span class="room-summary-label">Out of Order</span>
+        </div>
+    </div>
+
+    <div class="dashboard-room-toolbar">
+        <p id="dashboardStatus" class="dashboard-status" role="status" aria-live="polite">Memuat status kamar...</p>
+        <label class="dashboard-room-search">
+            <span>Cari nomor kamar</span>
+            <input id="dashboardSearch" class="form-control" type="search" placeholder="Contoh: 101">
+        </label>
+    </div>
+
+    <div id="dashboardRoomGrid" class="dashboard-room-grid" aria-live="polite">
+        <p class="dashboard-room-empty">Memuat status kamar...</p>
+    </div>
+</section>
+
+</template>
+<template id="module-lost-found">
+<div class="panel active">
+    <h3>Daily Lost & Found Registry</h3>
+    <p>Formulir pencatatan barang tertinggal milik tamu lengkap dengan nomor kamar dan petugas pengaman.</p>
+    
+    <form id="lostFoundForm" onsubmit="submitLostFound(event)">
+        <div style="display: flex; gap: 16px;">
+            <div class="form-group" style="flex: 2;">
+                <label>NAMA / DESKRIPSI BARANG</label>
+                <input type="text" id="lfItemName" required class="form-control" placeholder="Contoh: Dompet Kulit Hitam / HP Samsung">
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>NOMOR KAMAR / AREA</label>
+                <input type="text" id="lfRoom" required class="form-control" placeholder="Contoh: Room 405">
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 16px;">
+            <div class="form-group" style="flex: 1;">
+                <label>TANGGAL DITEMUKAN</label>
+                <input type="date" id="lfDate" required class="form-control">
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>PETUGAS YANG MENGAMANKAN</label>
+                <input type="text" id="lfFinder" required class="form-control" placeholder="Contoh: Rina (Housekeeping)">
+            </div>
+        </div>
+
+        <button type="submit" id="submitLfBtn" class="btn-primary">Simpan Data Lost & Found</button>
+    </form>
+</div>
+</template>
+<template id="module-maintenance">
+<div class="panel active">
+    <h3>Maintenance Request</h3>
+    <p>Formulir pelaporan kendala fasilitas atau kerusakan alat hotel untuk segera ditindaklanjuti tim teknik.</p>
+    
+    <form id="maintenanceForm" onsubmit="submitMaintenance(event)">
+        <div class="form-group">
+            <label>NOMOR KAMAR / AREA</label>
+            <input type="text" id="maintRoom" required class="form-control" placeholder="Contoh: Room 302 / Lobby Utama">
+        </div>
+
+        <div class="form-group">
+            <label>DESKRIPSI KERUSAKAN</label>
+            <textarea id="maintDesc" required rows="3" class="form-control" placeholder="Jelaskan kendala secara singkat..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 16px;">
+            <div class="form-group" style="flex: 1;">
+                <label>PRIORITAS</label>
+                <select id="maintPriority" class="form-control">
+                    <option value="Normal">Normal</option>
+                    <option value="Urgent">Urgent (Darurat)</option>
+                    <option value="Low">Low (Rendah)</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>NAMA PELAPOR / DEPARTEMEN</label>
+                <input type="text" id="maintReporter" required class="form-control" placeholder="Contoh: Siska (Front Office)">
+            </div>
+        </div>
+
+        <button type="submit" id="submitMaintBtn" class="btn-primary">Kirim Laporan</button>
+    </form>
+</div>
+</template>
+<template id="module-room-status">
+<div class="panel active">
+    <div class="room-status-heading">
+        <div>
+            <h3>Room Status Check</h3>
+            <p>Perbarui status langsung dari tabel. Setiap perubahan tersimpan sebagai riwayat.</p>
+        </div>
+        <div class="room-status-tools">
+            <label class="room-status-search">
+                <span>Cari nomor kamar</span>
+                <input id="roomStatusSearch" class="form-control" type="search" placeholder="Contoh: 101">
+            </label>
+            <button type="button" id="refreshRoomStatus" class="dashboard-page-button">Refresh</button>
+        </div>
+    </div>
+    <p id="roomStatusTableMessage" class="dashboard-status" role="status" aria-live="polite">Memuat status kamar...</p>
+    <div class="ios-table-container room-status-table-container">
+        <table class="ios-table room-status-table">
+            <thead>
+                <tr>
+                    <th scope="col" aria-sort="ascending"><button type="button" class="room-status-sort" data-sort-key="room">Room <span aria-hidden="true">↑</span></button></th>
+                    <th scope="col" aria-sort="none"><button type="button" class="room-status-sort" data-sort-key="status">Status kamar <span aria-hidden="true"></span></button></th>
+                    <th scope="col">Catatan</th>
+                    <th scope="col" aria-sort="none"><button type="button" class="room-status-sort" data-sort-key="staff">Petugas <span aria-hidden="true"></span></button></th>
+                    <th scope="col" aria-sort="none"><button type="button" class="room-status-sort" data-sort-key="timestamp">Terakhir diperbarui <span aria-hidden="true"></span></button></th>
+                    <th scope="col">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="roomStatusRows">
+                <tr><td colspan="6">Memuat status kamar...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</template>
+<template id="module-settings">
+<section class="panel active settings-panel">
+    <h3>Settings</h3>
+    <p>Customize navigation and manage the shared room list used in Room Status Check.</p>
+
+    <h3 class="settings-section-title">Navigation</h3>
+    <div class="settings-options">
+        <div class="settings-field">
+            <label for="navigationStyle">Tab content</label>
+            <select id="navigationStyle" class="form-control">
+                <option value="adaptive">Automatic (icons on mobile, icon and text on desktop)</option>
+                <option value="icons">Icons only</option>
+                <option value="text">Text only</option>
+                <option value="both">Icons and text</option>
+            </select>
+        </div>
+
+        <div class="settings-field">
+            <label for="navigationSize">Tab size</label>
+            <select id="navigationSize" class="form-control">
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="settings-preview" aria-live="polite">
+        <span class="settings-preview-icon" aria-hidden="true">📊</span>
+        <span class="settings-preview-label">Data Dashboard</span>
+    </div>
+
+    <div class="settings-room-section">
+        <h3 class="settings-section-title">Room numbers</h3>
+        <p>Add a room number to the shared room list. It will appear in Room Status Check on all devices.</p>
+        <form id="addRoomForm" class="settings-room-form">
+            <label class="settings-field" for="newRoomNumber">
+                <span>Room number</span>
+                <input id="newRoomNumber" class="form-control" type="text" maxlength="30" placeholder="e.g. 101" required>
+            </label>
+            <button id="addRoomButton" class="btn-primary" type="submit">Add room</button>
+        </form>
+        <p id="settingsRoomMessage" class="dashboard-status" role="status" aria-live="polite">Loading room numbers...</p>
+        <ul id="settingsRoomList" class="settings-room-list"></ul>
+    </div>
+</section>
+
+</template>
+<template id="module-shift-log">
+<div class="panel active">
+    <h3>Buku Operan Shift Digital</h3>
+    <p>Catat dan pantau operan tugas antar shift secara real-time untuk menghindari miskomunikasi pergantian jam kerja.</p>
+    
+    <form id="shiftForm" onsubmit="submitShiftLog(event)">
+        <div style="display: flex; gap: 16px;">
+            <div class="form-group" style="flex: 1;">
+                <label>PILIH SHIFT</label>
+                <select id="shiftName" class="form-control">
+                    <option value="Pagi">Shift Pagi</option>
+                    <option value="Sore">Shift Sore</option>
+                    <option value="Malam">Shift Malam</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>PETUGAS SERAH TERIMA</label>
+                <input type="text" id="shiftStaff" required class="form-control" placeholder="Contoh: Budi (Front Office)">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>CATATAN / TUGAS PENDING</label>
+            <textarea id="shiftNotes" required rows="3" class="form-control" placeholder="Tuliskan pesan atau tugas yang harus dilanjutkan shift berikutnya..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>KENDALA / MASALAH KHUSUS</label>
+            <textarea id="shiftIssues" rows="2" class="form-control" placeholder="Kendala tamu, sistem error, atau fasilitas bermasalah (kosongkan jika aman)..."></textarea>
+        </div>
+
+        <button type="submit" id="submitShiftBtn" class="btn-primary">Simpan Operan Shift</button>
+    </form>
+</div>
+</template>
+
+    <!-- Script Utama (Router & Helper) -->
+    <script>
+/**
+ * QIN Portal - Main Application Router & Controller
+ * Data access is available only through authenticated Apps Script RPC calls.
+ */
+
+let portalSessionToken = '';
+
+const themeToggle = document.getElementById('themeToggle');
+const loginForm = document.getElementById('loginForm');
+const loginButton = document.getElementById('loginButton');
+const loginMessage = document.getElementById('loginMessage');
+
+function setTheme(theme) {
+    const isDark = theme === 'dark';
+    document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+    themeToggle.textContent = isDark ? '☀️ Light mode' : '🌙 Dark mode';
+    themeToggle.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} theme`);
+    themeToggle.setAttribute('aria-pressed', String(isDark));
+}
+
+setTheme(localStorage.getItem('hotel-portal-theme') === 'dark' ? 'dark' : 'light');
+themeToggle.addEventListener('click', () => {
+    const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    localStorage.setItem('hotel-portal-theme', nextTheme);
+});
+
+function applyNavigationSettings(style, size) {
+    const validStyles = ['adaptive', 'icons', 'text', 'both'];
+    const validSizes = ['small', 'medium', 'large'];
+    const navStyle = validStyles.includes(style) ? style : 'adaptive';
+    const navSize = validSizes.includes(size) ? size : 'medium';
+
+    document.body.dataset.navStyle = navStyle;
+    document.body.dataset.navSize = navSize;
+}
+
+applyNavigationSettings(
+    localStorage.getItem('hotel-portal-nav-style') || 'adaptive',
+    localStorage.getItem('hotel-portal-nav-size') || 'medium'
+);
+
+function callPortalServer(methodName, args) {
+    return new Promise((resolve, reject) => {
+        if (!window.google || !google.script || !google.script.run) {
+            reject(new Error('Portal harus dibuka melalui URL Google Apps Script Web App.'));
+            return;
+        }
+
+        const runner = google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(error => reject(new Error(error && error.message
+                ? error.message
+                : 'Permintaan ke server gagal.')));
+        runner[methodName].apply(runner, args);
+    });
+}
+
+function initializePortalAuth() {
+    loginForm.addEventListener('submit', async event => {
+        event.preventDefault();
+        loginMessage.textContent = '';
+        loginButton.disabled = true;
+        loginButton.textContent = 'Memeriksa...';
+
+        try {
+            const result = await callPortalServer('authenticatePortalUser', [
+                document.getElementById('loginUsername').value.trim(),
+                document.getElementById('loginPassword').value
+            ]);
+            portalSessionToken = result.token;
+            document.getElementById('signedInUser').textContent = result.username;
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('authScreen').hidden = true;
+            document.getElementById('portalShell').hidden = false;
+            loadModule('shift-log', null, 'Shift Handover Log');
+        } catch (error) {
+            loginMessage.textContent = error.message;
+        } finally {
+            loginButton.disabled = false;
+            loginButton.textContent = 'Masuk';
+        }
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', logoutPortalUser);
+}
+
+async function logoutPortalUser() {
+    const token = portalSessionToken;
+    portalSessionToken = '';
+    document.getElementById('portalShell').hidden = true;
+    document.getElementById('authScreen').hidden = false;
+    document.getElementById('loginUsername').value = '';
+    document.getElementById('loginPassword').value = '';
+    loginMessage.textContent = '';
+
+    if (!token) return;
+    try {
+        await callPortalServer('logoutPortalUser', [token]);
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+}
+
+initializePortalAuth();
+
+function loadModule(moduleName, evt, titleText) {
+    const buttons = document.querySelectorAll('.menu-btn');
+    buttons.forEach(button => button.classList.remove('active'));
+    const activeButton = evt && evt.currentTarget
+        ? evt.currentTarget
+        : document.querySelector(`.menu-btn[data-module="${moduleName}"]`);
+    if (activeButton) activeButton.classList.add('active');
+
+    document.getElementById('pageTitle').innerText = titleText;
+    const template = document.getElementById(`module-${moduleName}`);
+    if (!template) {
+        throw new Error(`Template modul tidak ditemukan: ${moduleName}`);
+    }
+    document.getElementById('moduleContainer').replaceChildren(template.content.cloneNode(true));
+
+    if (moduleName === 'dashboard') renderDataDashboard();
+    if (moduleName === 'settings') initializeNavigationSettings();
+    if (moduleName === 'room-status') initializeRoomStatusModule();
+}
+
+function fetchPortalData() {
+    if (!portalSessionToken) {
+        return Promise.reject(new Error('Sesi login tidak tersedia. Silakan masuk kembali.'));
+    }
+    return callPortalServer('getPortalData', [portalSessionToken]);
+}
+
+function fetchDashboardData() {
+    return fetchPortalData().then(data => data.records);
+}
+
+function sendDataToGoogleSheet(data, formId, defaultButtonText, btnElement, onRequestComplete) {
+    if (!portalSessionToken) {
+        showToast('Sesi berakhir', 'Silakan masuk kembali sebelum mengirim data.', true);
+        if (btnElement) {
+            btnElement.innerText = defaultButtonText;
+            btnElement.disabled = false;
+        }
+        return;
+    }
+
+    callPortalServer('savePortalData', [portalSessionToken, data])
+        .then(result => {
+            showToast('Berhasil Disimpan', result.message || 'Data laporan telah masuk ke Google Sheets.');
+            if (formId) document.getElementById(formId).reset();
+            if (btnElement) {
+                btnElement.innerText = defaultButtonText;
+                btnElement.disabled = false;
+            }
+            if (onRequestComplete) onRequestComplete();
+        })
+        .catch(error => {
+            console.error('Data save failed:', error);
+            showToast('Gagal', error.message || 'Terjadi kesalahan saat mengirim data.', true);
+            if (btnElement) {
+                btnElement.innerText = defaultButtonText;
+                btnElement.disabled = false;
+            }
+            if (onRequestComplete) onRequestComplete();
+        });
+}
+
+function showToast(title, message, isError = false) {
+    const toast = document.getElementById('toastNotification');
+    document.getElementById('toastTitle').innerText = title;
+    document.getElementById('toastMessage').innerText = message;
+    toast.style.borderLeft = isError ? '4px solid #ff3b30' : '4px solid #34c759';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+</script>
+    <!-- Script Fungsi Khusus Modul -->
+    <script>
+/**
+ * QIN Portal - Modules Logic
+ * Berisi fungsi penanganan form dari masing-masing modul hotel
+ */
+
+// 1. Modul: Shift Handover Log
+function submitShiftLog(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitShiftBtn');
+    btn.innerText = 'Menyimpan...';
+    btn.disabled = true;
+
+    const formData = {
+        action: 'shiftLog',
+        shift: document.getElementById('shiftName').value,
+        petugas: document.getElementById('shiftStaff').value,
+        catatan: document.getElementById('shiftNotes').value,
+        kendala: document.getElementById('shiftIssues').value
+    };
+
+    sendDataToGoogleSheet(formData, 'shiftForm', 'Simpan Operan Shift', btn);
+}
+
+// 2. Modul: Maintenance Request
+function submitMaintenance(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitMaintBtn');
+    btn.innerText = 'Mengirim...';
+    btn.disabled = true;
+
+    const formData = {
+        action: 'maintenance',
+        kamar: document.getElementById('maintRoom').value,
+        kerusakan: document.getElementById('maintDesc').value,
+        prioritas: document.getElementById('maintPriority').value,
+        pelapor: document.getElementById('maintReporter').value
+    };
+
+    sendDataToGoogleSheet(formData, 'maintenanceForm', 'Kirim Laporan', btn);
+}
+
+// 3. Modul: Lost & Found Registry
+function submitLostFound(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitLfBtn');
+    btn.innerText = 'Menyimpan...';
+    btn.disabled = true;
+
+    const formData = {
+        action: 'lostFound',
+        item: document.getElementById('lfItemName').value,
+        room: document.getElementById('lfRoom').value,
+        date: document.getElementById('lfDate').value,
+        finder: document.getElementById('lfFinder').value
+    };
+
+    sendDataToGoogleSheet(formData, 'lostFoundForm', 'Simpan Data Lost & Found', btn);
+}
+</script>
+    <script>
+const roomStatusGroups = [
+    { key: 'dirty', label: 'Dirty', countId: 'roomCountDirty', className: 'room-card-dirty' },
+    { key: 'clean', label: 'Clean', countId: 'roomCountClean', className: 'room-card-clean' },
+    { key: 'inspected', label: 'Inspected', countId: 'roomCountInspected', className: 'room-card-inspected' },
+    { key: 'ooo', label: 'Out of Order', countId: 'roomCountOoo', className: 'room-card-ooo' }
+];
+
+let dashboardRooms = [];
+
+function renderDataDashboard() {
+    document.getElementById('dashboardSearch').addEventListener('input', renderDashboardRooms);
+    document.getElementById('dashboardRefresh').addEventListener('click', refreshDashboard);
+    refreshDashboard();
+}
+
+function refreshDashboard() {
+    const status = document.getElementById('dashboardStatus');
+    const refreshButton = document.getElementById('dashboardRefresh');
+    status.textContent = 'Memuat status kamar...';
+    refreshButton.disabled = true;
+
+    fetchPortalData()
+        .then(data => {
+            dashboardRooms = getLatestDashboardRooms(data);
+            updateRoomStatusSummary(dashboardRooms);
+            renderDashboardRooms();
+        })
+        .catch(error => {
+            console.error('Room dashboard load failed:', error);
+            status.textContent = `Gagal memuat data kamar: ${error.message}`;
+            document.getElementById('dashboardRoomGrid').innerHTML =
+                '<p class="dashboard-room-empty">Data status kamar tidak tersedia.</p>';
+        })
+        .finally(() => {
+            refreshButton.disabled = false;
+        });
+}
+
+function getLatestDashboardRooms(data) {
+    const latestByRoom = new Map();
+
+    (data.rooms || []).forEach(room => {
+        const roomNumber = String(room.room || '').trim();
+        if (!roomNumber) return;
+        latestByRoom.set(roomNumber.toLowerCase(), {
+            room: roomNumber,
+            status: String(room.status || 'Dirty (Kotor)'),
+            timestamp: String(room.timestamp || '')
+        });
+    });
+
+    (data.records || [])
+        .filter(record => record.mode === 'roomStatus')
+        .forEach(record => {
+            const details = record.details || [];
+            const room = details.find(field => field.label.toLowerCase() === 'room') || details[0];
+            const status = details.find(field => field.label.toLowerCase() === 'status') || details[1];
+            if (!room || !String(room.value).trim()) return;
+
+            const key = String(room.value).trim().toLowerCase();
+            const existing = latestByRoom.get(key);
+            const recordTime = Date.parse(record.timestamp);
+            const existingTime = existing ? Date.parse(existing.timestamp) : NaN;
+            if (!existing || (!Number.isNaN(recordTime) &&
+                (Number.isNaN(existingTime) || recordTime > existingTime))) {
+                latestByRoom.set(key, {
+                    room: String(room.value).trim(),
+                    status: status ? String(status.value) : '',
+                    timestamp: String(record.timestamp || '')
+                });
+            }
+        });
+
+    return Array.from(latestByRoom.values())
+        .sort((first, second) => first.room.localeCompare(second.room, undefined, { numeric: true }));
+}
+
+function updateRoomStatusSummary(rooms) {
+    const counts = Object.fromEntries(roomStatusGroups.map(group => [group.key, 0]));
+    rooms.forEach(room => {
+        const group = getRoomStatusGroup(room.status);
+        if (group) counts[group.key] += 1;
+    });
+
+    roomStatusGroups.forEach(group => {
+        document.getElementById(group.countId).textContent = String(counts[group.key]);
+    });
+}
+
+function renderDashboardRooms() {
+    const query = document.getElementById('dashboardSearch').value.trim().toLowerCase();
+    const grid = document.getElementById('dashboardRoomGrid');
+    const visibleRooms = dashboardRooms.filter(room => room.room.toLowerCase().includes(query));
+
+    if (dashboardRooms.length === 0) {
+        grid.innerHTML = '<p class="dashboard-room-empty">Belum ada kamar. Tambahkan nomor kamar melalui Settings.</p>';
+    } else if (visibleRooms.length === 0) {
+        grid.innerHTML = '<p class="dashboard-room-empty">Nomor kamar tidak ditemukan.</p>';
+    } else {
+        grid.innerHTML = visibleRooms.map(room => {
+            const group = getRoomStatusGroup(room.status);
+            const label = group ? group.label : (room.status || 'Unknown');
+            const className = group ? group.className : 'room-card-unknown';
+            return `
+                <article class="dashboard-room-card ${className}" title="Kamar ${escapeDashboardText(room.room)} — ${escapeDashboardText(label)}">
+                    <span class="dashboard-room-number">${escapeDashboardText(room.room)}</span>
+                    <span class="dashboard-room-status">${escapeDashboardText(label)}</span>
+                </article>
+            `;
+        }).join('');
+    }
+
+    document.getElementById('dashboardStatus').textContent =
+        `${visibleRooms.length} dari ${dashboardRooms.length} kamar`;
+}
+
+function getRoomStatusGroup(statusValue) {
+    const status = String(statusValue || '').trim().toLowerCase();
+    if (status.startsWith('dirty')) return roomStatusGroups[0];
+    if (status.startsWith('clean')) return roomStatusGroups[1];
+    if (status.startsWith('inspected')) return roomStatusGroups[2];
+    if (status.startsWith('ooo') || status.includes('out of order')) return roomStatusGroups[3];
+    return null;
+}
+
+function escapeDashboardText(value) {
+    const element = document.createElement('span');
+    element.textContent = value == null ? '' : String(value);
+    return element.innerHTML;
+}
+
+</script>
+    <script>
+function initializeNavigationSettings() {
+    const styleSelect = document.getElementById('navigationStyle');
+    const sizeSelect = document.getElementById('navigationSize');
+    const preview = document.querySelector('.settings-preview');
+
+    styleSelect.value = document.body.dataset.navStyle || 'adaptive';
+    sizeSelect.value = document.body.dataset.navSize || 'medium';
+
+    const saveSettings = () => {
+        applyNavigationSettings(styleSelect.value, sizeSelect.value);
+        localStorage.setItem('hotel-portal-nav-style', styleSelect.value);
+        localStorage.setItem('hotel-portal-nav-size', sizeSelect.value);
+        preview.dataset.navStyle = styleSelect.value;
+        preview.dataset.navSize = sizeSelect.value;
+    };
+
+    styleSelect.addEventListener('change', saveSettings);
+    sizeSelect.addEventListener('change', saveSettings);
+    saveSettings();
+
+    initializeRoomSettings();
+}
+
+function initializeRoomSettings() {
+    const form = document.getElementById('addRoomForm');
+    const input = document.getElementById('newRoomNumber');
+    const button = document.getElementById('addRoomButton');
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        const room = input.value.trim();
+        if (!room) return;
+
+        button.disabled = true;
+        button.textContent = 'Adding...';
+        sendDataToGoogleSheet(
+            { action: 'addRoom', room: room },
+            null,
+            'Add room',
+            button,
+            loadSettingsRoomList
+        );
+        document.getElementById('settingsRoomMessage').textContent =
+            'Add request sent. Refresh the list to confirm the room was saved.';
+    });
+
+    loadSettingsRoomList();
+}
+
+function loadSettingsRoomList() {
+    const message = document.getElementById('settingsRoomMessage');
+    const list = document.getElementById('settingsRoomList');
+    if (!message || !list) return;
+
+    message.textContent = 'Loading room numbers...';
+    fetchPortalData()
+        .then(data => {
+            const rooms = data.rooms || [];
+            if (rooms.length === 0) {
+                list.innerHTML = '';
+                message.textContent = 'No rooms registered yet.';
+                return;
+            }
+
+            list.innerHTML = rooms.map(room => {
+                const item = document.createElement('li');
+                item.textContent = room.room;
+                return `<li>${item.innerHTML}</li>`;
+            }).join('');
+            message.textContent = `${rooms.length} rooms registered`;
+        })
+        .catch(error => {
+            console.error('Room list load failed:', error);
+            message.textContent = `Could not load room numbers: ${error.message}`;
+            list.innerHTML = '';
+        });
+}
+
+</script>
+    <script>
+let roomStatusRooms = [];
+let roomStatusSortKey = 'room';
+let roomStatusSortDirection = 'asc';
+
+function initializeRoomStatusModule() {
+    document.getElementById('refreshRoomStatus').addEventListener('click', loadRoomStatusTable);
+    document.getElementById('roomStatusSearch').addEventListener('input', renderRoomStatusRows);
+    document.querySelector('.room-status-table thead').addEventListener('click', event => {
+        const button = event.target.closest('.room-status-sort');
+        if (!button) return;
+
+        if (button.dataset.sortKey === roomStatusSortKey) {
+            roomStatusSortDirection = roomStatusSortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            roomStatusSortKey = button.dataset.sortKey;
+            roomStatusSortDirection = 'asc';
+        }
+        updateRoomStatusSortHeaders();
+        renderRoomStatusRows();
+    });
+    document.getElementById('roomStatusRows').addEventListener('click', event => {
+        const button = event.target.closest('.room-status-save');
+        if (!button) return;
+
+        const room = button.dataset.room;
+        const select = Array.from(document.querySelectorAll('.room-status-select'))
+            .find(item => item.dataset.room === room);
+        const notes = Array.from(document.querySelectorAll('.room-status-notes'))
+            .find(item => item.dataset.room === room);
+        const staff = Array.from(document.querySelectorAll('.room-status-staff'))
+            .find(item => item.dataset.room === room);
+        if (!select || !notes || !staff) return;
+
+        button.disabled = true;
+        button.textContent = 'Saving...';
+        sendDataToGoogleSheet({
+            action: 'roomStatus',
+            kamar: room,
+            status: select.value,
+            catatan: notes.value.trim(),
+            petugas: staff.value.trim()
+        }, null, 'Update', button, loadRoomStatusTable);
+    });
+    loadRoomStatusTable();
+}
+
+function loadRoomStatusTable() {
+    const message = document.getElementById('roomStatusTableMessage');
+    const rows = document.getElementById('roomStatusRows');
+    if (!message || !rows) return;
+
+    message.textContent = 'Memuat status kamar...';
+    rows.innerHTML = '<tr><td colspan="6">Memuat status kamar...</td></tr>';
+
+    fetchPortalData()
+        .then(data => {
+            const latestByRoom = new Map();
+            data.rooms.forEach(room => {
+                const roomNumber = String(room.room || '').trim();
+                if (!roomNumber) return;
+                latestByRoom.set(roomNumber.toLowerCase(), {
+                    room: roomNumber,
+                    status: String(room.status || 'Dirty (Kotor)'),
+                    notes: String(room.notes || ''),
+                    staff: String(room.staff || ''),
+                    timestamp: String(room.timestamp || '')
+                });
+            });
+
+            data.records
+                .filter(isRoomStatusRecord)
+                .forEach(record => {
+                    const roomRecord = normalizeRoomStatusRecord(record);
+                    if (!roomRecord) return;
+
+                    const roomKey = roomRecord.room.toLowerCase();
+                    const existing = latestByRoom.get(roomKey);
+                    const recordTime = Date.parse(roomRecord.timestamp);
+                    const existingTime = existing ? Date.parse(existing.timestamp) : NaN;
+                    if (!existing || (!Number.isNaN(recordTime) &&
+                        (Number.isNaN(existingTime) || recordTime > existingTime))) {
+                        latestByRoom.set(roomKey, roomRecord);
+                    }
+                });
+
+            roomStatusRooms = Array.from(latestByRoom.values())
+                .sort((first, second) => first.room.localeCompare(second.room, undefined, { numeric: true }));
+
+            updateRoomStatusSortHeaders();
+            renderRoomStatusRows();
+        })
+        .catch(error => {
+            console.error('Room status load failed:', error);
+            message.textContent = `Gagal memuat status kamar: ${error.message}`;
+            rows.innerHTML = '<tr><td colspan="6">Status kamar tidak tersedia.</td></tr>';
+        });
+}
+
+function isRoomStatusRecord(record) {
+    const mode = String(record.mode || record.action || '').replace(/[^a-z]/gi, '').toLowerCase();
+    return mode === 'roomstatus';
+}
+
+function normalizeRoomStatusRecord(record) {
+    const details = Array.isArray(record.details) ? record.details : [];
+    const getDetail = (...labels) => details.find(field =>
+        labels.includes(String(field.label || '').trim().toLowerCase())
+    )?.value;
+    const room = getDetail('room', 'room number', 'nomor kamar', 'kamar') ??
+        record.room ?? record.kamar ?? details[0]?.value;
+    if (room == null || !String(room).trim()) return null;
+
+    return {
+        room: String(room).trim(),
+        status: String(getDetail('status', 'room status', 'status kamar') ??
+            record.status ?? details[1]?.value ?? 'Unknown'),
+        notes: String(getDetail('notes', 'note', 'catatan') ?? record.notes ?? record.catatan ?? ''),
+        staff: String(getDetail('staff', 'petugas') ?? record.staff ?? record.petugas ?? ''),
+        timestamp: String(record.timestamp || '')
+    };
+}
+
+function renderRoomStatusRows() {
+    const query = document.getElementById('roomStatusSearch').value.trim().toLowerCase();
+    const rows = document.getElementById('roomStatusRows');
+    const message = document.getElementById('roomStatusTableMessage');
+    const filteredRooms = roomStatusRooms
+        .filter(room => room.room.toLowerCase().includes(query))
+        .sort((first, second) => {
+            const firstValue = first[roomStatusSortKey] || '';
+            const secondValue = second[roomStatusSortKey] || '';
+            const firstTime = roomStatusSortKey === 'timestamp' ? Date.parse(firstValue) : NaN;
+            const secondTime = roomStatusSortKey === 'timestamp' ? Date.parse(secondValue) : NaN;
+            const order = !Number.isNaN(firstTime) && !Number.isNaN(secondTime)
+                ? firstTime - secondTime
+                : String(firstValue).localeCompare(String(secondValue), undefined, {
+                    numeric: roomStatusSortKey === 'room',
+                    sensitivity: 'base'
+                });
+            return roomStatusSortDirection === 'asc' ? order : -order;
+        });
+
+    if (roomStatusRooms.length === 0) {
+        rows.innerHTML = '<tr><td colspan="6">Belum ada nomor kamar. Tambahkan kamar melalui Settings.</td></tr>';
+    } else if (filteredRooms.length === 0) {
+        rows.innerHTML = '<tr><td colspan="6">Nomor kamar tidak ditemukan.</td></tr>';
+    } else {
+        rows.innerHTML = filteredRooms.map(room => `
+            <tr>
+                <td>${escapeRoomStatusText(room.room)}</td>
+                <td>
+                    <select class="form-control room-status-select" data-room="${escapeRoomAttribute(room.room)}" aria-label="Status kamar ${escapeRoomStatusText(room.room)}">
+                        ${getRoomStatusOptions(room.status)}
+                    </select>
+                </td>
+                <td><input class="form-control room-status-notes" data-room="${escapeRoomAttribute(room.room)}" aria-label="Catatan kamar ${escapeRoomStatusText(room.room)}" value="${escapeRoomAttribute(room.notes)}"></td>
+                <td><input class="form-control room-status-staff" data-room="${escapeRoomAttribute(room.room)}" aria-label="Petugas kamar ${escapeRoomStatusText(room.room)}" value="${escapeRoomAttribute(room.staff)}"></td>
+                <td>${room.timestamp ? renderRoomStatusTimestamp(room.timestamp) : 'Belum diperbarui'}</td>
+                <td><button type="button" class="dashboard-page-button room-status-save" data-room="${escapeRoomAttribute(room.room)}">Update</button></td>
+            </tr>
+        `).join('');
+    }
+
+    message.textContent = `${filteredRooms.length} dari ${roomStatusRooms.length} kamar`;
+}
+
+function renderRoomStatusTimestamp(value) {
+    const timestamp = String(value == null ? '' : value).trim();
+    const dateValue = new Date(timestamp);
+    if (Number.isNaN(dateValue.getTime())) {
+        return escapeRoomStatusText(timestamp);
+    }
+
+    const date = new Intl.DateTimeFormat(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit'
+    }).format(dateValue);
+    const time = new Intl.DateTimeFormat(undefined, {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    }).format(dateValue);
+
+    return `<time class="dashboard-timestamp" datetime="${escapeRoomAttribute(timestamp)}"><span>${escapeRoomStatusText(date)}</span><span>${escapeRoomStatusText(time)}</span></time>`;
+}
+
+function updateRoomStatusSortHeaders() {
+    document.querySelectorAll('.room-status-sort').forEach(button => {
+        const isActive = button.dataset.sortKey === roomStatusSortKey;
+        const header = button.closest('th');
+        header.setAttribute('aria-sort', isActive
+            ? roomStatusSortDirection === 'asc' ? 'ascending' : 'descending'
+            : 'none');
+        button.querySelector('span').textContent = isActive
+            ? roomStatusSortDirection === 'asc' ? '↑' : '↓'
+            : '';
+    });
+}
+
+function getRoomStatusOptions(currentStatus) {
+    const statuses = [
+        'Dirty (Kotor)',
+        'Clean (Bersih)',
+        'Inspected (Diperiksa)',
+        'OOO (Out of Order)'
+    ];
+    if (currentStatus && !statuses.includes(currentStatus)) statuses.unshift(currentStatus);
+
+    return statuses.map(status => `
+        <option value="${escapeRoomAttribute(status)}" ${status === currentStatus ? 'selected' : ''}>
+            ${escapeRoomStatusText(status)}
+        </option>
+    `).join('');
+}
+
+function escapeRoomStatusText(value) {
+    const element = document.createElement('span');
+    element.textContent = value == null ? '' : String(value);
+    return element.innerHTML;
+}
+
+function escapeRoomAttribute(value) {
+    return escapeRoomStatusText(value).replace(/"/g, '&quot;');
+}
+
+function getRoomStatusBadgeClass(statusValue) {
+    const status = String(statusValue).toLowerCase();
+    if (status.startsWith('clean') || status.startsWith('inspected')) return 'status-badge-success';
+    if (status.startsWith('dirty')) return 'status-badge-warning';
+    if (status.startsWith('ooo')) return 'status-badge-danger';
+    return 'status-badge-recorded';
+}
+
+</script>
+</body>
+</html>

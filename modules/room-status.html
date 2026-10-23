@@ -1,0 +1,33 @@
+<div class="panel active">
+    <div class="room-status-heading">
+        <div>
+            <h3>Room Status Check</h3>
+            <p>Perbarui status langsung dari tabel. Setiap perubahan tersimpan sebagai riwayat.</p>
+        </div>
+        <div class="room-status-tools">
+            <label class="room-status-search">
+                <span>Cari nomor kamar</span>
+                <input id="roomStatusSearch" class="form-control" type="search" placeholder="Contoh: 101">
+            </label>
+            <button type="button" id="refreshRoomStatus" class="dashboard-page-button">Refresh</button>
+        </div>
+    </div>
+    <p id="roomStatusTableMessage" class="dashboard-status" role="status" aria-live="polite">Memuat status kamar...</p>
+    <div class="ios-table-container room-status-table-container">
+        <table class="ios-table room-status-table">
+            <thead>
+                <tr>
+                    <th scope="col" aria-sort="ascending"><button type="button" class="room-status-sort" data-sort-key="room">Room <span aria-hidden="true">↑</span></button></th>
+                    <th scope="col" aria-sort="none"><button type="button" class="room-status-sort" data-sort-key="status">Status kamar <span aria-hidden="true"></span></button></th>
+                    <th scope="col">Catatan</th>
+                    <th scope="col" aria-sort="none"><button type="button" class="room-status-sort" data-sort-key="staff">Petugas <span aria-hidden="true"></span></button></th>
+                    <th scope="col" aria-sort="none"><button type="button" class="room-status-sort" data-sort-key="timestamp">Terakhir diperbarui <span aria-hidden="true"></span></button></th>
+                    <th scope="col">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="roomStatusRows">
+                <tr><td colspan="6">Memuat status kamar...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>

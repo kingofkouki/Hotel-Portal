@@ -1,0 +1,33 @@
+<div class="panel active">
+    <h3>Buku Operan Shift Digital</h3>
+    <p>Catat dan pantau operan tugas antar shift secara real-time untuk menghindari miskomunikasi pergantian jam kerja.</p>
+    
+    <form id="shiftForm" onsubmit="submitShiftLog(event)">
+        <div style="display: flex; gap: 16px;">
+            <div class="form-group" style="flex: 1;">
+                <label>PILIH SHIFT</label>
+                <select id="shiftName" class="form-control">
+                    <option value="Pagi">Shift Pagi</option>
+                    <option value="Sore">Shift Sore</option>
+                    <option value="Malam">Shift Malam</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>PETUGAS SERAH TERIMA</label>
+                <input type="text" id="shiftStaff" required class="form-control" placeholder="Contoh: Budi (Front Office)">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>CATATAN / TUGAS PENDING</label>
+            <textarea id="shiftNotes" required rows="3" class="form-control" placeholder="Tuliskan pesan atau tugas yang harus dilanjutkan shift berikutnya..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>KENDALA / MASALAH KHUSUS</label>
+            <textarea id="shiftIssues" rows="2" class="form-control" placeholder="Kendala tamu, sistem error, atau fasilitas bermasalah (kosongkan jika aman)..."></textarea>
+        </div>
+
+        <button type="submit" id="submitShiftBtn" class="btn-primary">Simpan Operan Shift</button>
+    </form>
+</div>

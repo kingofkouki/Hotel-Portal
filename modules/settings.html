@@ -1,0 +1,45 @@
+<section class="panel active settings-panel">
+    <h3>Settings</h3>
+    <p>Customize navigation and manage the shared room list used in Room Status Check.</p>
+
+    <h3 class="settings-section-title">Navigation</h3>
+    <div class="settings-options">
+        <div class="settings-field">
+            <label for="navigationStyle">Tab content</label>
+            <select id="navigationStyle" class="form-control">
+                <option value="adaptive">Automatic (icons on mobile, icon and text on desktop)</option>
+                <option value="icons">Icons only</option>
+                <option value="text">Text only</option>
+                <option value="both">Icons and text</option>
+            </select>
+        </div>
+
+        <div class="settings-field">
+            <label for="navigationSize">Tab size</label>
+            <select id="navigationSize" class="form-control">
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="settings-preview" aria-live="polite">
+        <span class="settings-preview-icon" aria-hidden="true">📊</span>
+        <span class="settings-preview-label">Data Dashboard</span>
+    </div>
+
+    <div class="settings-room-section">
+        <h3 class="settings-section-title">Room numbers</h3>
+        <p>Add a room number to the shared room list. It will appear in Room Status Check on all devices.</p>
+        <form id="addRoomForm" class="settings-room-form">
+            <label class="settings-field" for="newRoomNumber">
+                <span>Room number</span>
+                <input id="newRoomNumber" class="form-control" type="text" maxlength="30" placeholder="e.g. 101" required>
+            </label>
+            <button id="addRoomButton" class="btn-primary" type="submit">Add room</button>
+        </form>
+        <p id="settingsRoomMessage" class="dashboard-status" role="status" aria-live="polite">Loading room numbers...</p>
+        <ul id="settingsRoomList" class="settings-room-list"></ul>
+    </div>
+</section>
